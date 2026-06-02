@@ -1,3 +1,4 @@
+import { Calendar, MapPin, Ticket } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { Alert, Button, Image, StyleSheet, Text, View } from 'react-native';
 
@@ -19,6 +20,20 @@ export default function EventoItem() {
         <Image style={styles.imagem} source={{ uri: evento.imagem }} />
         <Text style={styles.titulo}>{evento.titulo}</Text>
         <Text style={styles.descricao}>{evento.descricao}</Text>
+        <View style={styles.icone}>
+         <Calendar size={14} color='gray' />
+         <Text style={styles.texto}>{evento.data}</Text>
+        </View>
+
+        <View style={styles.icone}>
+          <MapPin size={14} color='gray' />
+          <Text style={styles.texto}>{evento.local}</Text>
+        </View>
+
+        <View style={styles.icone}>
+          <Ticket size={14} color='gray' />
+          <Text style={styles.texto}>{evento.valor.toLocaleString()}</Text>
+          </View>
         <Text style={styles.texto}>Quando: {evento.data}</Text>
         <Text style={styles.texto}>Valor: R$ {evento.valor}</Text>
       </View>
@@ -60,6 +75,11 @@ const styles = StyleSheet.create({
   imagem: {
     width: 500,
     height: 200,
+  },
+  icone: {
+    flexDirection: 'row',
+    gap: 8,
+    marginTop: 5
   },
   titulo: {
     fontSize: 28,
