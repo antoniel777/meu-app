@@ -1,123 +1,132 @@
-import { useState } from 'react';
-import { View, TextInput, Button, Alert, StyleSheet } from 'react-native';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
+import { useState } from "react";
+import {Alert,Button,StyleSheet,Text,TextInput,View,} from "react-native";
+import { useRouter } from "expo-router";
 
 export default function ModalScreen() {
-  const [titulo, setTitulo] = useState('');
-  const [descricao, setDescricao] = useState('');
-  const [local, setLocal] = useState('');
-  const [data, setData] = useState('');
-  const [valor, setValor] = useState('');
+  const router = useRouter();
+
+  const [titulo, setTitulo] = useState("");
+  const [descricao, setDescricao] = useState("");
+  const [local, setLocal] = useState("");
+  const [data, setData] = useState("");
+  const [valor, setValor] = useState("");
 
   const onSubmit = () => {
     if (titulo.length < 3 || titulo.length > 256) {
-      return Alert.alert('Erro', 'Título deve ter entre 3 e 256 caracteres');
+      return Alert.alert("Erro", "Título inválido");
     }
+
     if (descricao.length < 3 || descricao.length > 256) {
-      return Alert.alert('Erro', 'Descrição deve ter entre 3 e 256 caracteres');
+      return Alert.alert("Erro", "Descrição inválida");
     }
+
     if (local.length < 3 || local.length > 256) {
-      return Alert.alert('Erro', 'Local deve ter entre 3 e 256 caracteres');
+      return Alert.alert("Erro", "Local inválido");
     }
 
-    const dataEscolhida = new Date(data);
+    const dataEvento = new Date(data);
     const hoje = new Date();
-    const umAnoDepois = new Date();
-    umAnoDepois.setFullYear(hoje.getFullYear() + 1);
 
-    if (isNaN(dataEscolhida.getTime()) || dataEscolhida <= hoje || dataEscolhida >= umAnoDepois) {
-      return Alert.alert('Erro', 'Data deve ser futura e até no máximo 1 ano à frente');
+    const umAno = new Date();
+    umAno.setFullYear(umAno.getFullYear() + 1);
+
+    if (dataEvento <= hoje || dataEvento >= umAno) {
+      return Alert.alert(
+        "Erro",
+        "A data deve ser maior que hoje e menor que 1 ano"
+      );
     }
 
-    const valorNumerico = Number(valor);
-    if (isNaN(valorNumerico) || valorNumerico <= 1 || valorNumerico >= 1000) {
-      return Alert.alert('Erro', 'Valor deve ser maior que R$ 1,00 e menor que R$ 1.000,00');
+    const valorNumero = Number(valor);
+
+    if (valorNumero < 1 || valorNumero > 1000) {
+      return Alert.alert(
+        "Erro",
+        "O valor deve ser maior que R$1 e menor que R$1000"
+      );
     }
 
-    Alert.alert('Sucesso', 'Evento cadastrado com sucesso!');
-    onCancel();
+    Alert.alert("Sucesso", "Evento cadastrado!");
+    router.back();
   };
 
   const onCancel = () => {
-    setTitulo('');
-    setDescricao('');
-    setLocal('');
-    setData('');
-    setValor('');
+    setTitulo("");
+    setDescricao("");
+    setLocal("");
+    setData("");
+    setValor("");
+
+    router.back();
   };
 
   return (
-    <ThemedView style={styles.container}>
-      <ThemedText type="title">Incluir Evento</ThemedText>
-
+    <View style={styles.container}>
+      <Text>Título</Text>
       <TextInput
         style={styles.input}
-        placeholder="Título"
         value={titulo}
         onChangeText={setTitulo}
-        maxLength={256}
+        placeholder="Digite o título do evento"
       />
 
+      <Text>Descrição</Text>
       <TextInput
         style={styles.input}
-        placeholder="Descrição"
         value={descricao}
         onChangeText={setDescricao}
-        maxLength={256}
+        placeholder="Informe a descrição"
       />
 
+      <Text>Local</Text>
       <TextInput
         style={styles.input}
-        placeholder="Local"
         value={local}
         onChangeText={setLocal}
-        maxLength={256}
+        placeholder="Informe o local"
       />
 
+      <Text>Data</Text>
       <TextInput
         style={styles.input}
-        placeholder="Data (formato: AAAA-MM-DD)"
         value={data}
         onChangeText={setData}
+        placeholder="2026-06-20"
       />
 
+      <Text>Valor</Text>
       <TextInput
         style={styles.input}
-        placeholder="Valor"
         value={valor}
         onChangeText={setValor}
         keyboardType="numeric"
+        placeholder="100"
       />
 
-      <View style={styles.botoesArea}>
-        <Button title="Cancelar" onPress={onCancel} color="#666666" />
-        <Button title="Confirmar" onPress={onSubmit} color="#2e7d32" />
+      <View style={styles.botoes}>
+        <Button title="Cancelar" onPress={onCancel} />
+        <Button title="Confirmar" onPress={onSubmit} />
       </View>
-    </ThemedView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
     padding: 20,
-    gap: 12
+    backgroundColor: "#fff",
   },
   input: {
-    width: '100%',
     borderWidth: 1,
-    borderColor: '#cccccc',
-    borderRadius: 6,
+    borderColor: "#ccc",
     padding: 10,
-    fontSize: 16
+    marginBottom: 15,
+    borderRadius: 5,
   },
-  botoesArea: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20
-  }
+  botoes: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 20,
+  },
 });
