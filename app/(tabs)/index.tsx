@@ -1,5 +1,6 @@
 import Clima from "@/components/clima";
 import EventoLista from "@/components/evento-lista";
+import Eventoitem from "@/components/evento-item";
 import { useRouter } from "expo-router";
 import { Plus } from "lucide-react-native";
 import { StyleSheet, Text, TouchableOpacity } from "react-native"; 
@@ -46,11 +47,11 @@ const styles = StyleSheet.create({
   fab: {
     position: "absolute",
     width: 56,
-    height: 56,
+    height: 45,
     alignItems: "center",
     justifyContent: "center",
     right: 20,
-    bottom: 20,
+    bottom: 1,
     backgroundColor: "#007AFF",
     borderRadius: 28,
     elevation: 8,

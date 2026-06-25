@@ -6,7 +6,7 @@ const eventosIniciais = [
   {
     id: '1',
     titulo: 'Pesca da Tainha',
-    imagem: 'https://oatlantico.com.br/wp-content/uploads/2023/08/Com-257-mil-tainhas-capturadas...', 
+    imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4Kb1A5tRjk-nb2JUueOdX77XG5HiS4AkvqlTs0Pj0w1WQ6sA84NnGVS4&s=10', 
     descricao: 'A pesca da tainha será intensa no Pântano do Sul',
     local: 'Pântano do Sul, Florianópolis/SC',
     data: '30/Maio',
@@ -24,7 +24,7 @@ const eventosIniciais = [
   {
     id: '3',
     titulo: 'Arrial do Sesi',
-    imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgly5GHuAUwlyQLfx1XigcSiLMZdM...', 
+    imagem: 'https://t3.ftcdn.net/jpg/20/39/30/20/240_F_2039302027_aLCbtXZ4xyoYmFlMGLys2I4FZMuQAK2I.jpg', 
     descricao: 'Muitos prêmios e diversão',
     local: 'Pagani, Palhoça/SC',
     data: '12/Junho',

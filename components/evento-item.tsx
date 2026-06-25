@@ -10,7 +10,6 @@ export default function EventoItem({
   local,
   valor
 }) {
-  // Estado para controlar a quantidade de reservas
   const [quantidade, setQuantidade] = useState(0);
 
   return (
@@ -42,7 +41,6 @@ export default function EventoItem({
           <Text style={styles.quantidade}>{quantidade}</Text>
           <Button title="-" onPress={() => setQuantidade(quantidade - 1)} />
         </View>
-
         <View>
           <Button
             title="reservar"
@@ -53,3 +51,41 @@ export default function EventoItem({
     </View>
   );
 }
+const styles = StyleSheet.create({
+  container: {
+    marginLeft: 8,
+    marginRight: 8,
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  evento: {
+    flexDirection: 'column',
+    marginTop: 20,
+  },
+  reserva: {
+    flexDirection: 'row',
+    gap: 8,
+    marginTop: 20,
+  },
+  contador: {
+    flexDirection: 'row',
+    gap: 8,
+    alignItems: 'center'
+  },
+  imagem: {
+    width: 500,
+    height: 200,
+  },
+  titulo: {
+    fontSize: 28,
+  },
+  texto: {
+    fontSize: 18,
+  },
+  valor: {
+    fontSize: 18,
+  },
+  quantidade: {
+    fontSize: 16,
+  },
+  })
