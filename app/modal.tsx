@@ -1,132 +1,148 @@
-import { useState } from "react";
-import {Alert,Button,StyleSheet,Text,TextInput,View,} from "react-native";
-import { useRouter } from "expo-router";
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { useRouter } from 'expo-router';
+import { useState } from 'react';
+import { Alert, Button, StyleSheet, Text, TextInput, View } from 'react-native';
+
+dayjs.extend(customParseFormat);
 
 export default function ModalScreen() {
   const router = useRouter();
+  const [titulo, setTitulo] = useState('');
+  const [tituloErro, setTituloErro] = useState('');
+  const [descricao, setDescricao] = useState('');
+  const [descricaoErro, setDescricaoErro] = useState('');
+  const [local, setLocal] = useState('');
+  const [localErro, setLocalErro] = useState('');
+  const [data, setData] = useState('');
+  const [dataErro, setDataErro] = useState('');
+  const [valor, setValor] = useState('');
+  const [valorErro, setValorErro] = useState('');
+  const [imagem, setImagem] = useState('');
+  const [imageErro, setImagemErro] = useState('');
 
-  const [titulo, setTitulo] = useState("");
-  const [descricao, setDescricao] = useState("");
-  const [local, setLocal] = useState("");
-  const [data, setData] = useState("");
-  const [valor, setValor] = useState("");
+  const isValid = () => {
+    var isErro = false;
 
-  const onSubmit = () => {
-    if (titulo.length < 3 || titulo.length > 256) {
-      return Alert.alert("Erro", "Título inválido");
+    if(titulo.length < 3 || titulo.length > 64) {
+        setTituloErro('Título deve ter entre 3 e 64 caracteres');
+        isErro = true;
     }
 
-    if (descricao.length < 3 || descricao.length > 256) {
-      return Alert.alert("Erro", "Descrição inválida");
+    if(descricao.length < 3 || descricao.length > 64) {
+        setDescricaoErro('Descrição deve ter entre 3 e 64 caracteres');
+        isErro = true;
     }
 
-    if (local.length < 3 || local.length > 256) {
-      return Alert.alert("Erro", "Local inválido");
+    if(local.length < 3 || local.length > 64) {
+        setLocalErro('Local deve ter entre 3 e 64 caracteres');
+        isErro = true;
     }
 
-    const dataEvento = new Date(data);
-    const hoje = new Date();
+    var dataAtual = dayjs(data, 'DD/MM/YYYY');
+    var dataMaxima = dayjs().add(1, 'year');
 
-    const umAno = new Date();
-    umAno.setFullYear(umAno.getFullYear() + 1);
-
-    if (dataEvento <= hoje || dataEvento >= umAno) {
-      return Alert.alert(
-        "Erro",
-        "A data deve ser maior que hoje e menor que 1 ano"
-      );
+    if(dataAtual > dataMaxima) {
+        setDataErro(`Data deve ser menor que ${dataMaxima.format('DD/MM/YYYY')}`);
+        isErro = true;
     }
 
-    const valorNumero = Number(valor);
-
-    if (valorNumero < 1 || valorNumero > 1000) {
-      return Alert.alert(
-        "Erro",
-        "O valor deve ser maior que R$1 e menor que R$1000"
-      );
+    if(Number(valor) < 1.0 || Number(valor) > 1000.0) {
+        setValorErro('Valor deve ter $1 e $1000');
+        isErro = true;
     }
 
-    Alert.alert("Sucesso", "Evento cadastrado!");
+    return isErro;
+};
+
+const clear = () => {
+    /*
+     função para limpar as mensagens de erro
+    */
+
+    setTituloErro('');
+    setDescricaoErro('');
+    setLocalErro('');
+    setDataErro('');
+    setValorErro('');
+    setImagemErro('');
+};
+
+const onCancel = () => {
     router.back();
-  };
+};
 
-  const onCancel = () => {
-    setTitulo("");
-    setDescricao("");
-    setLocal("");
-    setData("");
-    setValor("");
+const onSubmit = () => {
+    /*
+       1 - Limpar mensagens de erro
+       2 - Validar os campos
+       3 - Salvar o novo evento
+    */
 
-    router.back();
-  };
+    clear();
+
+    if(isValid()){
+        /* executar a lógica de criação do evento */
+        Alert.alert('Evento preenchido corretamente');
+    }
+};
 
   return (
     <View style={styles.container}>
-      <Text>Título</Text>
-      <TextInput
-        style={styles.input}
-        value={titulo}
-        onChangeText={setTitulo}
-        placeholder="Digite o título do evento"
-      />
-
-      <Text>Descrição</Text>
-      <TextInput
-        style={styles.input}
-        value={descricao}
-        onChangeText={setDescricao}
-        placeholder="Informe a descrição"
-      />
-
-      <Text>Local</Text>
-      <TextInput
-        style={styles.input}
-        value={local}
-        onChangeText={setLocal}
-        placeholder="Informe o local"
-      />
-
-      <Text>Data</Text>
-      <TextInput
-        style={styles.input}
-        value={data}
-        onChangeText={setData}
-        placeholder="2026-06-20"
-      />
-
-      <Text>Valor</Text>
-      <TextInput
-        style={styles.input}
-        value={valor}
-        onChangeText={setValor}
-        keyboardType="numeric"
-        placeholder="100"
-      />
-
-      <View style={styles.botoes}>
-        <Button title="Cancelar" onPress={onCancel} />
-        <Button title="Confirmar" onPress={onSubmit} />
+      <View>
+        <Text style={styles.formularioRotulo}>Cadastrar novo evento</Text>
+      </View>
+      <View style={styles.campoContainer}>
+        <Text style={styles.campoRotulo}>Qual o título do evento?</Text>
+        <TextInput placeholder="Ex: Pesca da Tainha" value={titulo} onChangeText={texto => setTitulo(texto)} />
+        <Text style={styles.campoErro}>{tituloErro}</Text>
+      </View>
+      <View style={styles.campoContainer}>
+        <Text style={styles.campoRotulo}>Qual a descrição evento?</Text>
+        <TextInput value={descricao} onChangeText={texto => setDescricao(texto)} />
+        <Text style={styles.campoErro}>{descricaoErro}</Text>
+      </View>
+      <View style={styles.campoContainer}>
+        <Text style={styles.campoRotulo}>Qual a data do evento?</Text>
+        <TextInput value={data} onChangeText={texto => setData(texto)} />
+        <Text style={styles.campoErro}>{dataErro}</Text>
+      </View>
+      <View style={styles.campoContainer}>
+        <Text style={styles.campoRotulo}>Qual a local do evento?</Text>
+        <TextInput value={local} onChangeText={texto => setLocal(texto)} />
+        <Text style={styles.campoErro}>{localErro}</Text>
+      </View>
+      <View style={styles.campoContainer}>
+        <Text style={styles.campoRotulo}>Qual o valor do ingresso?</Text>
+        <TextInput value={valor} onChangeText={texto => setValor(texto)} />
+        <Text style={styles.campoErro}>{valorErro}</Text>
+      </View>
+      <View>
+        <Button title="cancelar" onPress={onCancel} />
+        <Button title="confirmar" onPress={onSubmit} />
       </View>
     </View>
   );
-}
+   }
 
-const styles = StyleSheet.create({
+ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#fff",
   },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
-    marginBottom: 15,
-    borderRadius: 5,
+  formularioRotulo: {
+    
+    fontSize: 16,
+    fontWeight: 600
   },
-  botoes: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 20,
+  campoContainer: {
+    paddingVertical: 15,
+  },
+  campoRotulo: {
+    color: 'gray'
+  },
+  campoErro: {
+    fontSize: 12,
+    color: 'red'
   },
 });
