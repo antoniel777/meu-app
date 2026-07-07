@@ -15,6 +15,9 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Clima />
+      <Text style={styles.titulo}>Próximos eventos</Text>
+      <EventoLista /> 
       <TouchableOpacity
         style={styles.fab}
         activeOpacity={0.7}
@@ -22,12 +25,6 @@ export default function HomeScreen() {
       >
         <Plus size={24} color="white" />
       </TouchableOpacity>
-
-      <Clima />
-      
-      <Text style={styles.titulo}>Próximos eventos</Text>
-      
-      <EventoLista /> 
     </SafeAreaView>
   );
 }

@@ -1,3 +1,4 @@
+import { criarEvento } from '@/services/api-service';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { useRouter } from 'expo-router';
@@ -56,10 +57,7 @@ export default function ModalScreen() {
 };
 
 const clear = () => {
-    /*
-     função para limpar as mensagens de erro
-    */
-
+    
     setTituloErro('');
     setDescricaoErro('');
     setLocalErro('');
@@ -72,19 +70,32 @@ const onCancel = () => {
     router.back();
 };
 
-const onSubmit = () => {
-    /*
-       1 - Limpar mensagens de erro
-       2 - Validar os campos
-       3 - Salvar o novo evento
-    */
+const onSubmit = async () => {
 
-    clear();
+  clear();
 
-    if(isValid()){
-        /* executar a lógica de criação do evento */
-        Alert.alert('Evento preenchido corretamente');
-    }
+  if (isFormularioComErro()) {
+    return;
+  }
+
+  try {
+    const evento = await criarEvento({
+      titulo,
+      descricao,
+      local,
+      data,
+      valor,
+    });
+
+    Vibration.vibrate(1 * 1000);
+
+    Alert.alert('Evento registrado com sucesso');
+
+    router.back();
+  } catch (err) {
+    console.log(err);
+    Alert.alert(`Erro ao criar evento ${err}`);
+  }
 };
 
   return (
